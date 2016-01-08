@@ -27,8 +27,6 @@
     
     // set the various background images
     self.backgroundImage.image = [UIImage imageNamed: @"Reversi.png"];
-
-    [self.endInfoLabel setText:@"HUEHUE"];
     self.endInfoLabel.hidden = YES;
     
     // create our game board
