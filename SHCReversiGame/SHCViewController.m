@@ -11,7 +11,7 @@
 #import "SHCReversiBoardView.h"
 #import "SHCComputerOpponent.h"
 
-@interface SHCViewController ()
+@interface SHCViewController () <UIAlertViewDelegate>
 
 @end
 
@@ -27,8 +27,8 @@
     
     // set the various background images
     self.backgroundImage.image = [UIImage imageNamed: @"Reversi.png"];
-    self.gameOverImage.image = [UIImage imageNamed: @"GameOver.png"];
-    self.gameOverImage.hidden = YES;
+//    self.gameOverImage.image = [UIImage imageNamed: @"GameOver.png"];
+//    self.gameOverImage.hidden = YES;
     
     // create our game board
     _board = [[SHCReversiBoard alloc] init];
@@ -41,17 +41,35 @@
     [self gameStateChanged];
     [_board.reversiBoardDelegate addDelegate:self];
     
-    // add a tap recognizer
-    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
-                                             initWithTarget:self action:@selector(restartGame:)];
-    [self.view addGestureRecognizer:tapRecognizer];
-    
     _computer = [[SHCComputerOpponent alloc] initWithBoard:_board
                                                      color:BoardCellStateWhitePiece
                                                   maxDepth:5];
 }
 
-- (void)restartGame:(UITapGestureRecognizer*)recognizer
+- (void)showGameOverMessage
+{
+    NSString *message;
+    if (_board.whiteScore > _board.blackScore) {
+        message = @"Белые выиграли!";
+    } else {
+        message = @"Черные выиграли!";
+    }
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Игра окончена"
+                                                    message:message
+                                                   delegate:self
+                                          cancelButtonTitle:@"Переиграть"
+                                          otherButtonTitles:nil];
+    [alert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        [self restartGame];
+    }
+}
+
+- (void)restartGame
 {
     if (_board.gameHasFinished)
     {
@@ -62,9 +80,13 @@
 
 - (void)gameStateChanged
 {
-    _gameOverImage.hidden = !_board.gameHasFinished;
-    _whiteScore.text = [NSString stringWithFormat:@"%d", _board.whiteScore];
-    _blackScore.text = [NSString stringWithFormat:@"%d", _board.blackScore];
+    if (_board.gameHasFinished) {
+        [self showGameOverMessage];
+    }
+    
+    _whiteScore.text = [NSString stringWithFormat:@"%ld", (long)_board.whiteScore];
+    _blackScore.text = [NSString stringWithFormat:@"%ld", (long)_board.blackScore];
+//    _gameOverImage.hidden = !_board.gameHasFinished;
 }
 
 - (void)didReceiveMemoryWarning
