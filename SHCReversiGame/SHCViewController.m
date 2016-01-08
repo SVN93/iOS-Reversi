@@ -27,8 +27,9 @@
     
     // set the various background images
     self.backgroundImage.image = [UIImage imageNamed: @"Reversi.png"];
-    self.gameOverImage.image = [UIImage imageNamed: @"GameOver.png"];
-    self.gameOverImage.hidden = YES;
+
+    [self.endInfoLabel setText:@"HUEHUE"];
+    self.endInfoLabel.hidden = YES;
     
     // create our game board
     _board = [[SHCReversiBoard alloc] init];
@@ -42,8 +43,8 @@
     [_board.reversiBoardDelegate addDelegate:self];
     
     // add a tap recognizer
-    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
-                                             initWithTarget:self action:@selector(restartGame:)];
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                    action:@selector(restartGame:)];
     [self.view addGestureRecognizer:tapRecognizer];
     
     _computer = [[SHCComputerOpponent alloc] initWithBoard:_board
@@ -62,9 +63,15 @@
 
 - (void)gameStateChanged
 {
-    _gameOverImage.hidden = !_board.gameHasFinished;
-    _whiteScore.text = [NSString stringWithFormat:@"%d", _board.whiteScore];
-    _blackScore.text = [NSString stringWithFormat:@"%d", _board.blackScore];
+    if (_board.whiteScore > _board.blackScore) {
+        self.endInfoLabel.text = @"Белые выиграли!\rНажмите чтобы играть";
+    } else {
+        self.endInfoLabel.text = @"Черные выиграли!\rНажмите чтобы играть";
+    }
+    
+    self.endInfoLabel.hidden = !_board.gameHasFinished;
+    _whiteScore.text = [NSString stringWithFormat:@"%ld", (long)_board.whiteScore];
+    _blackScore.text = [NSString stringWithFormat:@"%ld", (long)_board.blackScore];
 }
 
 - (void)didReceiveMemoryWarning

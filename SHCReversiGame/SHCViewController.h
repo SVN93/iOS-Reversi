@@ -15,6 +15,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundImage;
 @property (weak, nonatomic) IBOutlet UILabel *blackScore;
 @property (weak, nonatomic) IBOutlet UILabel *whiteScore;
-@property (weak, nonatomic) IBOutlet UIImageView *gameOverImage;
+
+@property (weak, nonatomic) IBOutlet UILabel *endInfoLabel;
 
 @end
