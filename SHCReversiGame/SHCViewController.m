@@ -50,7 +50,7 @@
                                                   maxDepth:5];
 }
 
-- (void)restartGame
+- (void)restartGame:(UITapGestureRecognizer *)tapRecognizer
 {
     if (_board.gameHasFinished)
     {
